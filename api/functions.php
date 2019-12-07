@@ -31,6 +31,8 @@ require_once($template_diretorio . "/endpoints/categoria_get.php");
 // SUCESSO NEWS 
 require_once($template_diretorio . "/endpoints/blog_post.php");
 require_once($template_diretorio . "/endpoints/blog_get.php");
+require_once($template_diretorio . "/endpoints/blog_put.php");
+require_once($template_diretorio . "/endpoints/blog_delete.php");
 
 
 // IMAGEM 

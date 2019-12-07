@@ -4,14 +4,38 @@
 function blog_scheme($slug){
     $post_id = get_posts_id_slug($slug);
     if($post_id){
-        $post_meta = get_post_meta($post_id);
+
         $images = get_attached_media('image', $post_id);
 
+        $images_array = null;
+
+        if($images){
+                $images_array = array();
+                foreach($images as $key => $value ){
+                    $images_array[] = array(
+                        'titulo' => $value->post_name,
+                        'src' => $value->guid,
+                    );
+                }
+        }
+
+        $postagem = get_post($post_id);
+        $post_meta = get_post_meta($post_id);
         $response = array(
-            'id' => $post_id,
-            'estado'=>$post_meta['estado'][0],           
-            'cidade'=>$post_meta['cidade'][0],                  
-            'categoria_blog'=>$post_meta['categoria_blog'][0],  
+            'id'             => $post_id,
+            'slug'           => $postagem->post_name,
+            'post_author'    => $postagem->post_author,           //Autor da postagem
+            'post_content'   => $postagem->post_content,           //Conteudo da Postagem
+            'post_title'     => $postagem->post_title,            //Titulo da Postagem
+            'post_status'    => $postagem->post_status,            //Status da Postagem.
+            'post_type'      => $postagem->post_type,         //Categoria da Postagem.
+            'post_excerpt'   => $postagem->post_excerpt,            //Resumo da Postagem. 
+            'comment_status' => $postagem->comment_status,    //Status dos comentarios */
+            'data'           => $postagem->post_date,
+            'estado'         => $post_meta['estado'][0],           
+            'cidade'         => $post_meta['cidade'][0],                  
+            'categoria_blog' => $post_meta['categoria_blog'][0],
+            'imagem'         => $images_array,
         );
     }else{
         $response = new WP_Error('naoexiste','Produto não Encontraco.', array('status' => 404));
@@ -20,12 +44,32 @@ function blog_scheme($slug){
 }
 
 
+// Retorna Um Post 
 function blog_posts($value){
     $postagem = get_post($value);
+
     $post_id = $postagem->ID;
-    $post_meta = get_post_meta($value);
+
+    $images = get_attached_media('image', $post_id);
+
+    $images_array = null;
+
+    if($images){
+            $images_array = array();
+            foreach($images as $key => $value ){
+                $images_array[] = array(
+                    'titulo' => $value->post_name,
+                    'src' => $value->guid,
+                );
+            }
+    }
+    $post_meta = get_post_meta($post_id);
+
+    $cat_blog = $post_meta['categoria_blog'][0];
+
     $resposta = array(
         'id'             => $post_id,
+        'slug'           => $postagem->post_name,
         'post_author'    => $postagem->post_author,           //Autor da postagem
         'post_content'   => $postagem->post_content,           //Conteudo da Postagem
         'post_title'     => $postagem->post_title,            //Titulo da Postagem
@@ -36,17 +80,21 @@ function blog_posts($value){
         'data'           => $postagem->post_date,
         'estado'         => $post_meta['estado'][0],           
         'cidade'         => $post_meta['cidade'][0],                  
-        'categoria_blog' => $post_meta['categoria_blog'][0],
+        'categoria_blog' => $cat_blog,
+        'imagem'         => $images_array[0],
     ); 
     return $resposta;   
 }
 
+
+// RETORNA TODOS AS POSTAGENS OPEN E PRIVATE
 
 function api_blog_get($request){
     $q      =  sanitize_text_field($request['q']) ?: '';
     $_page  = sanitize_text_field($request['_page'])?: 0;  
     $_limit = sanitize_text_field($request['_limit'])?: 9;  
     $usuario_id = sanitize_text_field($request['usuario_id']);
+
     $usuario_id_query = null;
     if($usuario_id){
         $usuario_id_query = array(
@@ -54,7 +102,6 @@ function api_blog_get($request){
             'value' => $usuario_id,
             'compare'=> '=',
         );
-        
     }
     
     $query = array(
@@ -84,34 +131,6 @@ function api_blog_get($request){
 
     }
 
-
-
-    //Exemplo BASICO DE BUSCAR POSTAGEM COM ID EX: -> ID:5
-    /* function api_blog_get($request){
-
-        $postagem = get_post(5);
-        $post_id = $postagem->ID;
-        $post_meta = get_post_meta(5);
-        $reposta = array(
-            'id'             => $post_id,
-            'post_author'    => $postagem->post_author,           //Autor da postagem
-            'post_content'   => $postagem->post_content,           //Conteudo da Postagem
-            'post_title'     => $postagem->post_title,            //Titulo da Postagem
-            'post_status'    => $postagem->post_status,            //Status da Postagem.
-            'post_type'      => $postagem->post_type,         //Categoria da Postagem.
-            'post_excerpt'   => $postagem->post_excerpt,            //Resumo da Postagem. 
-            'comment_status' => $postagem->comment_status,    //Status dos comentarios 
-            'estado'         => $post_meta['estado'][0],           
-            'cidade'         => $post_meta['cidade'][0],                  
-            'categoria_blog' => $post_meta['categoria_blog'][0],
-        ); 
-
-        return (rest_ensure_response($reposta));
-        
-        
-    } */
-
-
     function registrar_api_blog_get(){
         register_rest_route('api', '/blog', array(
             array(
@@ -122,5 +141,65 @@ function api_blog_get($request){
     }
 
     add_action('rest_api_init','registrar_api_blog_get');
+
+
+    // RETORNAR POSTAGEM PELO ID OU SLUG
+    function api_post_id_get($request){
+
+        $response = blog_scheme($request['slug']);
+        return rest_ensure_response($response);
+    }
+    
+    function registrar_api_post_id_get(){
+    
+        register_rest_route('api', '/blog/(?P<slug>[-\w]+)', array(
+            array(
+                'methods' => WP_REST_Server::READABLE,
+                'callback' => 'api_post_id_get',
+            ),
+        ));
+    }
+    
+    add_action('rest_api_init','registrar_api_post_id_get');
+
+
+
+    // RETORNA TODOS POSTS publish
+    function api_post_publish_get($request){
+
+        $query = new WP_Query( 
+            array( 
+                'post_status' => 'publish',
+                'post_type'     => 'blog',
+                'numberposts'   => -1,
+                
+            ) 
+        );
+
+        $posts = $query->get_posts();
+        $blog_post = array();
+        foreach ($posts as $key => $value) {
+            $blog_post[] = blog_posts($value->ID);
+        }
+    
+
+
+       return (rest_ensure_response($blog_post));
+
+
+
+    }
+    
+    function registrar_api_post_publish_get(){
+    
+        register_rest_route('api', '/blogpublish/', array(
+            array(
+                'methods' => WP_REST_Server::READABLE,
+                'callback' => 'api_post_publish_get',
+            ),
+        ));
+    }
+    
+    add_action('rest_api_init','registrar_api_post_publish_get');
 
 ?>
