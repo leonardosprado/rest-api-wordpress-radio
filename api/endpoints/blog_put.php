@@ -41,7 +41,6 @@ function api_blog_put($request){
         update_post_meta($post_id, 'cidade', $cidade);
         update_post_meta($post_id, 'categoria_blog', $categoria_blog);
         
-        
         // $files = $request->get_file_params();  //Recebe a Imagem em Destaque 
 
         // if($files){

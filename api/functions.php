@@ -74,6 +74,16 @@ require_once($template_diretorio . "/endpoints/musica_delete.php");
 require_once($template_diretorio . "/endpoints/equipe_post.php");
 require_once($template_diretorio . "/endpoints/equipe_get.php");
 
+// Filial 
+require_once($template_diretorio . "/endpoints/filial_get.php");
+require_once($template_diretorio . "/endpoints/filial_post.php");
+require_once($template_diretorio . "/endpoints/filial_delete.php");
+
+// Programacao
+require_once($template_diretorio . "/endpoints/programacao_get.php");
+require_once($template_diretorio . "/endpoints/programacao_post.php");
+
+
 
 function get_usuario_id_slug($slug){
     
@@ -167,6 +177,8 @@ function get_top_musica_id_slug($slug){
     $posts = $query->get_posts();
     return array_shift($posts);
 }
+
+
 function get_equipe_id_slug($slug){
     $query = new WP_Query(array(
          'name'          => $slug,
@@ -178,6 +190,28 @@ function get_equipe_id_slug($slug){
     return array_shift($posts);
 }
 
+function get_filial_id_slug($slug){
+    $query = new WP_Query(array(
+         'name'          => $slug,
+         'post_type'     => 'filial',
+         'numberposts'   => 1,
+         'fields'        => 'ids'
+    ));
+    $posts = $query->get_posts();
+    return array_shift($posts);
+}
+
+
+function get_programacao_id_slug($slug){
+    $query = new WP_Query(array(
+         'name'          => $slug,
+         'post_type'     => 'programacao',
+         'numberposts'   => 1,
+         'fields'        => 'ids'
+    ));
+    $posts = $query->get_posts();
+    return array_shift($posts);
+}
 
 function expire_token(){
     return time() + (60*60);
