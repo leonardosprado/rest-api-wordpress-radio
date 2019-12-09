@@ -41,12 +41,24 @@ function api_blog_put($request){
         update_post_meta($post_id, 'cidade', $cidade);
         update_post_meta($post_id, 'categoria_blog', $categoria_blog);
         
+        
+        // $files = $request->get_file_params();  //Recebe a Imagem em Destaque 
+
+        // if($files){
+        //     require_once(ABSPATH . 'wp-admin/includes/image.php');
+        //     require_once(ABSPATH . 'wp-admin/includes/file.php');
+        //     require_once(ABSPATH . 'wp-admin/includes/media.php');
+
+        //     foreach($files as $file => $array){
+        //         media_handle_upload($file, $blog_id); //Faz uplouad das imagem vinculado a Postagem
+        //     }
+        // }
 
     }
     else{
         $response = new WP_Error('Permissao','Usuario não possui permissaão.', array('status'=> 403 ));
     }
-    return rest_ensure_response($update);
+    return rest_ensure_response($response);
 }
 
 function registrar_api_blog_put(){
