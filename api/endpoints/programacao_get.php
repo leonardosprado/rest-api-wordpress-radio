@@ -45,6 +45,124 @@ function programacao_scheme($slug){
     return $response;
 }
 
+// Retornar programação que está no AR.
+function api_programacao_ar_get($request){
+
+    $q      =  sanitize_text_field($request['q']) ?: '';
+    $_page  = sanitize_text_field($request['_page'])?: 0;  
+    $_limit = sanitize_text_field($request['_limit'])?: 9;  
+    $usuario_id = sanitize_text_field($request['usuario_id']);
+
+
+    // date_default_timezone_set(‘America/Sao_Paulo’);
+    // date_default_timezone_set('America/Sao_Paulo');
+
+    $diasemanastring = array('domingo', 'segunda-feira', 'terca-feira', 'quarta-feira', 'quinta-feira', 'sexta-feira', 'sabado');
+
+    
+    
+
+
+    $timezone  = -3;
+    $dataAtual  = date('d/m/Y às H:i:s');
+    // $hora       = date("H:i:m", time() + 3600*($timezone+date("I")));
+    $hora       = date("H", time() + 3600*($timezone+date("I")));
+    $minuto       = date("i", time() + 3600*($timezone+date("I")));
+    $dia_semana_numero = date('N');
+    $dia_semana_string = $diasemanastring[$dia_semana_numero];
+
+
+
+    $custom_meta = array(
+        'relation' => 'AND',
+        array(
+            'key' => 'dia_semana',
+            'value'=>$dia_semana_string,
+            'compare'=>'=',
+        ),
+        array(
+            'relation' => 'AND',
+            array(
+                'key'       => explode(':','hora_ini')[0],
+                'value'     =>$hora,
+                'compare'   =>'<=',
+            
+            ),
+            array(
+                'key'       => explode(':','hora_fim')[0],
+                'value'     =>$hora,
+                'compare'   =>'>=',
+            
+            ),
+        )
+        
+      
+    );
+
+    $queryProgramacao = array(
+            'post_type'=>'programacao',
+            'post_per_page' => $_limit,
+            'paged' => $_page,
+            's' =>'',
+            'meta_query' => $custom_meta,
+        );
+    
+    
+    // $slug = $request["slug"];
+
+    // echo "Mês: $mes; Dia: $dia; Ano: $ano<br />\n";
+
+    // $q = sanitize_text_field($request['q'])?:'';
+    // $_page = sanitize_text_field($request['_page'])?:0;
+    // $_limit = sanitize_text_field($request['_limit'])?:-1;
+    // $usuario_id = sanitize_text_field($usuario_id);
+
+
+    // $queryProgramacao = array(
+    //     'post_type'=>'programacao',
+    //     'post_per_page' => $_limit,
+    //     'paged' => $_page,
+    //     's' =>'',
+    //     'meta_query' => array(
+    //         'relation' => 'AND',
+    //         array(
+    //             'key' => 'hora_ini',
+    //             'value'=>$hora,
+    //             'compare'=>'>',
+    //         ),
+    //         array(
+    //             'key' => 'hora_fim',
+    //             'value'=>$hora,
+    //             'compare'=>'<',
+    //         )
+    //     )
+    // );
+
+    $loopProgramacao = new WP_Query($queryProgramacao);
+    $posts = $loopProgramacao->posts;
+
+    foreach($posts as $key => $value){
+        $progra[] = programacao_scheme($value->post_name);
+    }
+
+    // $response = rest_ensure_response($progra);
+    // $response->header('X-Total-Count',$total);
+    return ($progra);
+    
+}
+
+function registrar_api_programacao_ar_get(){
+
+    register_rest_route('api', '/programaar', array(
+        array(
+            'methods' => WP_REST_Server::READABLE,
+            'callback' => 'api_programacao_ar_get',
+        ),
+    ));
+}
+
+add_action('rest_api_init','registrar_api_programacao_ar_get');
+
 // Retornar programação por filial e Dia da Semana 
 function api_programacao_filial_semana_get($request){
 

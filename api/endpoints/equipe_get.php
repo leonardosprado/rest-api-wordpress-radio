@@ -22,6 +22,8 @@ function equipe_scheme($slug){
         $response = array(
             'id'                =>$slug,
             "titulo"            =>$post->post_title,
+            "slug"              =>$post->post_name,
+            "sobre"             =>$post->post_content,
             "foto"              =>$images_array[0],
             "nome"              =>$post_meta['nome'][0],
             "sobrenome"         =>$post_meta['sobrenome'][0],
@@ -41,9 +43,8 @@ function equipe_scheme($slug){
 }
 
 
-//RETORNAR TODOS DA EQUIPE PELOA FILIAL
+//RETORNAR TODOS DA EQUIPE PELA FILIAL
 
-//RETORNAR TODOS DA EQUIPE
 function api_equipe_filial_get($request){
 
     $slug = $request["slug"];
@@ -54,6 +55,7 @@ function api_equipe_filial_get($request){
     $usuario_id = sanitize_text_field($usuario_id);
 
     $usuario_id_query = null;
+
     if($usuario_id){
         $usuario_id_query = array(
             'key' => 'usuario_id',
@@ -77,7 +79,7 @@ function api_equipe_filial_get($request){
         )
     );
 
-    $loop = new WP_Query($query);
+    $loop = new WP_Query($queryEquipe);
     $posts = $loop->posts;
     $total = $loop->found_posts;
 

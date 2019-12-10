@@ -73,6 +73,7 @@ require_once($template_diretorio . "/endpoints/musica_delete.php");
 // Equipe
 require_once($template_diretorio . "/endpoints/equipe_post.php");
 require_once($template_diretorio . "/endpoints/equipe_get.php");
+require_once($template_diretorio . "/endpoints/equipe_delete.php");
 
 // Filial 
 require_once($template_diretorio . "/endpoints/filial_get.php");
