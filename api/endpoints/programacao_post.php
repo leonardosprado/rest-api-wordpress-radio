@@ -18,8 +18,8 @@ function api_programacao_post($request){
         $filial  = sanitize_text_field($request['filial']);
         $cidade     = sanitize_text_field($request['cidade']);
         $estado   = sanitize_text_field($request['estado']);
-        $imagem_programa   = sanitize_text_field($request['imagem_programa']);
-        $logo_programa   = sanitize_text_field($request['logo_programa']);
+        $imagem_programa   = $request['imagem_programa'];
+        $logo_programa   = $request['logo_programa'];
 
         $usuario_id =  $user->user_login;
         $response   = array(

@@ -82,6 +82,8 @@ require_once($template_diretorio . "/endpoints/filial_delete.php");
 // Programacao
 require_once($template_diretorio . "/endpoints/programacao_get.php");
 require_once($template_diretorio . "/endpoints/programacao_post.php");
+require_once($template_diretorio . "/endpoints/programacao_put.php");
+require_once($template_diretorio . "/endpoints/programacao_delete.php");
 
 
 

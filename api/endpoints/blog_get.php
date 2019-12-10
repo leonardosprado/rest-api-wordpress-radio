@@ -24,9 +24,11 @@ function blog_scheme($slug){
         $response = array(
             'id'             => $post_id,
             'slug'           => $postagem->post_name,
+            'post_title'     => $postagem->post_title,
+            'post_date'      => $postagem->post_date,
+            'post_modified'  =>$postagem->post_modified,                //Titulo da Postagem
             'post_author'    => $postagem->post_author,           //Autor da postagem
             'post_content'   => $postagem->post_content,           //Conteudo da Postagem
-            'post_title'     => $postagem->post_title,            //Titulo da Postagem
             'post_status'    => $postagem->post_status,            //Status da Postagem.
             'post_type'      => $postagem->post_type,         //Categoria da Postagem.
             'post_excerpt'   => $postagem->post_excerpt,            //Resumo da Postagem. 
@@ -70,9 +72,11 @@ function blog_posts($value){
     $resposta = array(
         'id'             => $post_id,
         'slug'           => $postagem->post_name,
+        'post_title'     => $postagem->post_title,
+        'post_date'      => $postagem->post_date,
+        'post_modified'  =>$postagem->post_modified,               //Titulo da Postagem
         'post_author'    => $postagem->post_author,           //Autor da postagem
         'post_content'   => $postagem->post_content,           //Conteudo da Postagem
-        'post_title'     => $postagem->post_title,            //Titulo da Postagem
         'post_status'    => $postagem->post_status,            //Status da Postagem.
         'post_type'      => $postagem->post_type,         //Categoria da Postagem.
         'post_excerpt'   => $postagem->post_excerpt,            //Resumo da Postagem. 
