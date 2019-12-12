@@ -41,6 +41,12 @@ require_once($template_diretorio . "/endpoints/galeria_imagem_get.php");
 require_once($template_diretorio . "/endpoints/galeria_imagem_delete.php");
 require_once($template_diretorio . "/endpoints/galeria_imagem_put.php");
 
+// VIDEOS 
+require_once($template_diretorio . "/endpoints/galeria_video_post.php");
+require_once($template_diretorio . "/endpoints/galeria_video_get.php");
+require_once($template_diretorio . "/endpoints/galeria_video_delete.php");
+require_once($template_diretorio . "/endpoints/galeria_video_put.php");
+
 
 // BANNER
 require_once($template_diretorio . "/endpoints/banner_post.php");
@@ -60,6 +66,7 @@ require_once($template_diretorio . "/endpoints/imagem_post.php");
 
 // OUVINTE / USUARIO DO PORTAL 
 require_once($template_diretorio . "/endpoints/ouvinte_post.php");
+require_once($template_diretorio . "/endpoints/ouvinte_get.php");
 
 // PROMOCAO CADASTRATA
 require_once($template_diretorio . "/endpoints/promocao_cadastro_post.php");
@@ -127,6 +134,18 @@ function get_galeria_imagem_id_slug($slug){
    $query = new WP_Query(array(
         'name'          => $slug,
         'post_type'     => 'galeria_fotos',
+        'numberposts'   => 1,
+        'fields'        => 'ids'
+   ));
+
+   $posts = $query->get_posts();
+   return array_shift($posts);
+}
+
+function get_galeria_video_id_slug($slug){
+   $query = new WP_Query(array(
+        'name'          => $slug,
+        'post_type'     => 'galeria_video',
         'numberposts'   => 1,
         'fields'        => 'ids'
    ));

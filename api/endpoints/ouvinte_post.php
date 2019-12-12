@@ -8,6 +8,8 @@ function api_ouvinte_post($request){
         $primeiroNome = sanitize_text_field( $request['primeironome']);
         $sobrenome = sanitize_text_field( $request['sobrenome']);
         $telefone = sanitize_text_field( $request['telefone']);
+        $cidade = sanitize_text_field( $request['cidade']);
+        $estado = sanitize_text_field( $request['estado']);
         
         // $cidade = sanitize_text_field($request['cidade']);
         // $estado = sanitize_text_field($request['estado']);
@@ -33,6 +35,8 @@ function api_ouvinte_post($request){
                 wp_update_user($response);
                 update_user_meta($user_id, 'last_name', $sobrenome);
                 update_user_meta($user_id, 'telefone', $telefone);
+                update_user_meta($user_id, 'cidade', $cidade);
+                update_user_meta($user_id, 'estado', $estado);
             }
             else{
                 $response = new WP_Error('email','Email ja cadastrao.', array('status'=> 403 ));

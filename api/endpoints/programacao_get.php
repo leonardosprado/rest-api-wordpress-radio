@@ -45,6 +45,56 @@ function programacao_scheme($slug){
     return $response;
 }
 
+
+
+function programacao_scheme_horario($slug){
+
+    $post_id = get_programacao_id_slug($slug); 
+
+    $timezone  = -3;
+    $dataAtual  = date('d/m/Y às H:i:s');
+    // $hora       = date("H:i:m", time() + 3600*($timezone+date("I")));
+    $hora       = date("H", time() + 3600*($timezone+date("I")));
+    $minuto       = date("i", time() + 3600*($timezone+date("I")));
+    $dia_semana_numero = date('N');
+    $dia_semana_string = $diasemanastring[$dia_semana_numero];
+    $hora_int = (int)$hora;
+    
+    if($post_id){
+        $post = get_post($post_id);
+        $post_meta = get_post_meta($post_id);
+        $hora_ini = $post_meta['hora_ini'][0];
+        $hora_fim = $post_meta['hora_fim'][0];
+
+        if($hora>=$hora_ini and $hora<$hora_fim){
+            $response = array(
+                'id' => $post_id,
+                "hora_ini" =>$hora_ini,
+                "hora_fim" =>$hora_fim,
+                
+            );
+            return true;
+        }
+        else{
+            $response = array(
+                'id' => $post_id,
+                "hora_ini" =>$hora_ini,
+                "hora_fim" =>$hora_fim,
+                
+            );
+            return false;
+
+        }
+
+    }
+    else{ 
+        $response = new WP_Error('naoexiste','Prgramação não Encontrado',array('status'=>404));
+        return false;
+    }
+
+    // return $response;
+}
+
 // Retornar programação que está no AR.
 function api_programacao_ar_get($request){
 
@@ -59,8 +109,7 @@ function api_programacao_ar_get($request){
 
     $diasemanastring = array('domingo', 'segunda-feira', 'terca-feira', 'quarta-feira', 'quinta-feira', 'sexta-feira', 'sabado');
 
-    
-    
+
 
 
     $timezone  = -3;
@@ -70,7 +119,7 @@ function api_programacao_ar_get($request){
     $minuto       = date("i", time() + 3600*($timezone+date("I")));
     $dia_semana_numero = date('N');
     $dia_semana_string = $diasemanastring[$dia_semana_numero];
-
+    $hora_int = (int)$hora;
 
 
     $custom_meta = array(
@@ -79,24 +128,7 @@ function api_programacao_ar_get($request){
             'key' => 'dia_semana',
             'value'=>$dia_semana_string,
             'compare'=>'=',
-        ),
-        array(
-            'relation' => 'AND',
-            array(
-                'key'       => explode(':','hora_ini')[0],
-                'value'     =>$hora,
-                'compare'   =>'<=',
-            
-            ),
-            array(
-                'key'       => explode(':','hora_fim')[0],
-                'value'     =>$hora,
-                'compare'   =>'>=',
-            
-            ),
-        )
-        
-      
+        ),        
     );
 
     $queryProgramacao = array(
@@ -142,7 +174,9 @@ function api_programacao_ar_get($request){
     $posts = $loopProgramacao->posts;
 
     foreach($posts as $key => $value){
-        $progra[] = programacao_scheme($value->post_name);
+        if(programacao_scheme_horario($value->post_name)){
+            $progra[] = programacao_scheme($value->post_name);
+        }
     }
 
     // $response = rest_ensure_response($progra);

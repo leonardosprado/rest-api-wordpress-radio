@@ -2,7 +2,7 @@
 
 
 
- function usuario_scheme($user_id){
+ function ouvinte_scheme($user_id){
 
     $user = get_user_by( 'ID', $user_id );
     $user_meta = get_user_meta($user_id);
@@ -14,10 +14,10 @@
         "primeiroNome"  => $user_meta['first_name'][0],
         "sobrenome"     => $user_meta['last_name'][0],
         "apelido"       => $user_meta['nickname'][0],
-        "cep"           => $user_meta['cep'][0],
-        "numero"        => $user_meta['numero'][0],
-        "rua"           => $user_meta['rua'][0],
-        "bairro"        => $user_meta['bairro'][0],
+        // "cep"           => $user_meta['cep'][0],
+        // "numero"        => $user_meta['numero'][0],
+        // "rua"           => $user_meta['rua'][0],
+        // "bairro"        => $user_meta['bairro'][0],
         "cidade"        => $user_meta['cidade'][0],
         "estado"        => $user_meta['estado'][0],
         "biografia"     => $user_meta['description'][0],
@@ -27,16 +27,13 @@
  }
 
 // Retornar usuario logado. 
-function api_usuario_get($request){
+function api_ouvinte_get($request){
 
     $user = wp_get_current_user();
 
     $user_id = $user->ID;
-    $caps = get_user_meta($user_id, 'wp_capabilities', true);
-    $roles = array_keys((array) $caps); //Retronar a Função do Usuario
-    $roles = array_shift($roles);
 
-    if ($user_id > 0 and ($roles === "administrator" or $roles === "editor" or $roles === "author")) {
+    if($user_id > 0){
         $user_meta = get_user_meta($user_id);
 
         $response = array(
@@ -46,13 +43,13 @@ function api_usuario_get($request){
             "primeiroNome" =>  $user_meta['first_name'][0],
             "sobrenome"    =>  $user_meta['last_name'][0],
             "apelido"      =>  $user_meta['nickname'][0],
-            "cep" => $user_meta['cep'][0],
-            "numero" => $user_meta['numero'][0],
-            "rua" => $user_meta['rua'][0],
-            "bairro" => $user_meta['bairro'][0],
+            // "cep" => $user_meta['cep'][0],
+            // "numero" => $user_meta['numero'][0],
+            // "rua" => $user_meta['rua'][0],
+            // "bairro" => $user_meta['bairro'][0],
             "cidade" => $user_meta['cidade'][0],
             "estado" => $user_meta['estado'][0],
-            "biografia" => $user_meta['description'][0],
+            // "biografia" => $user_meta['description'][0],
             "funcao"    =>  $user->roles[0],
         );
     }
@@ -66,25 +63,25 @@ function api_usuario_get($request){
     return rest_ensure_response($response);
 }
 
-function registrar_api_usuario_get(){
+function registrar_api_ouvinte_get(){
 
-    register_rest_route('api', '/usuario', array(
+    register_rest_route('api', '/ouvinte', array(
         array(
             'methods' => WP_REST_Server::READABLE,
-            'callback' => 'api_usuario_get',
+            'callback' => 'api_ouvinte_get',
         ),
     ));
 }
 
-add_action('rest_api_init','registrar_api_usuario_get');
+add_action('rest_api_init','registrar_api_ouvinte_get');
 
 
 // Retornar Lista com todos Usuarios. 
-function api_usuarios_get($request){
+function api_ouvintes_get($request){
 
     $query = array(
         'number' => -1,
-        'role__not_in' => 'Subscriber',
+        'role' => 'subscriber',
 
     );
     $loop = new WP_User_Query($query);
@@ -93,25 +90,25 @@ function api_usuarios_get($request){
     $usuarios = array();
 
     foreach ($users as $key => $value) {
-        $usuarios[] = usuario_scheme($value->ID);
+        $usuarios[] = ouvinte_scheme($value->ID);
     }
     return rest_ensure_response($usuarios);
 }
 
-function registrar_api_usuarios_get(){
+function registrar_api_ouvintes_get(){
     
-    register_rest_route('api', '/usuarios', array(
+    register_rest_route('api', '/ouvintes', array(
         array(
             'methods' => WP_REST_Server::READABLE,
-            'callback' => 'api_usuarios_get',
+            'callback' => 'api_ouvintes_get',
         ),
     ));
 }
-add_action('rest_api_init','registrar_api_usuarios_get');
+add_action('rest_api_init','registrar_api_ouvintes_get');
 
 
 /// Retorna usuario pelo SLUG 
-function api_usuario_slug_get($request){
+function api_ouvinte_slug_get($request){
     $useron = wp_get_current_user();
     $user_id =  $useron->ID;
     if($user_id > 0){
@@ -134,15 +131,14 @@ function api_usuario_slug_get($request){
    
 } 
 
-function registrar_api_usuario_slug_get(){
-    register_rest_route('api', '/usuario/(?P<slug>[-\w]+)', array(
+function registrar_api_ouvinte_slug_get(){
+    register_rest_route('api', '/ouvinte/(?P<slug>[-\w]+)', array(
         array(
             'methods' => WP_REST_Server::READABLE,
-            'callback' => 'api_usuario_slug_get',
+            'callback' => 'api_ouvinte_slug_get',
         ),
     ));
 }
-add_action('rest_api_init','registrar_api_usuario_slug_get');
-
+add_action('rest_api_init','registrar_api_ouvinte_slug_get');
 
 ?>
