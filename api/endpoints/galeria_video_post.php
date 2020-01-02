@@ -11,6 +11,7 @@ function api_galeria_video_post($request){
         $nome_musica        =  sanitize_text_field($request['nome_musica']);
         $url_embed          =  sanitize_text_field($request['url_embed']);
         $descricao          =  sanitize_text_field($request['descricao']);
+        $filial             =  sanitize_text_field($request['filial']);
         
         $usuario_id  =  $user->user_login;
         $response    = array(
@@ -24,6 +25,7 @@ function api_galeria_video_post($request){
                 'url_embed'     => $url_embed,
                 'descricao'     => $descricao,
                 'data'          => $data,
+                'filial'        => $filial,
                 'cover' =>''
             )
         );
@@ -68,6 +70,7 @@ function api_galeria_video_post($request){
                 'cantor'        => $cantor,
                 'url_embed'     => $url_embed,
                 'descricao'     => $descricao,
+                'filial'        => $filial,
                 'cover'         => $images_array[0],
             )
         );

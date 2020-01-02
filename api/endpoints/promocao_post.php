@@ -11,6 +11,8 @@ function api_promocao_post($request){
         $data_ini   = sanitize_text_field($request['data_ini']);
         $data_fim   = sanitize_text_field($request['data_fim']);
         $status     = sanitize_text_field( $request['status']);
+        $filial     = sanitize_text_field( $request['filial']);
+
         $usuario_id =  $user->user_login;
         $response   = array(
             'post_author'   =>$user_id,
@@ -24,6 +26,7 @@ function api_promocao_post($request){
                 'data_ini'                  => $data_ini,
                 'data_fim'                  => $data_fim,
                 'status'                    => $status,
+                'filial'                    => $filial,
             )
         );
         $imagem_id = wp_insert_post($response);

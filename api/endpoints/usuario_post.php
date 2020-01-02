@@ -11,9 +11,9 @@ function api_usuario_post($request){
         $primeiroNome = sanitize_text_field( $request['primeiroNome']);
         $sobrenome = sanitize_text_field( $request['sobrenome']);
         
-        $cidade = sanitize_text_field($request['cidade']);
-        $estado = sanitize_text_field($request['estado']);
-
+        $filial = sanitize_text_field($request['filial']);
+        // $cidade = sanitize_text_field($request['cidade']);
+        // $estado = sanitize_text_field($request['estado']);
         $senha = sanitize_text_field($request['senha']);
 
         $capabilities = sanitize_text_field($request['funcao']);
@@ -31,8 +31,9 @@ function api_usuario_post($request){
             );
             wp_update_user($response);
             update_user_meta($user_id, 'last_name', $sobrenome);
-            update_user_meta($user_id, 'cidade', $cidade);
-            update_user_meta($user_id, 'estado', $estado);
+            update_user_meta($user_id, 'filial', $filial);
+            // update_user_meta($user_id, 'cidade', $cidade);
+            // update_user_meta($user_id, 'estado', $estado);
         }
         else{
             $response = new WP_Error('email','Email ja cadastrao.', array('status'=> 403 ));

@@ -5,9 +5,10 @@ function api_galeria_imagem_post($request){
     $user_id =  $user->ID;
     if($user_id > 0){
 
-        $titulo      =  sanitize_text_field($request['titulo']);
-        $descricao   =  sanitize_text_field($request['descricao']);
-        $data   =  sanitize_text_field($request['data']);
+        $titulo         =  sanitize_text_field($request['titulo']);
+        $descricao      =  sanitize_text_field($request['descricao']);
+        $data           =  sanitize_text_field($request['data']);
+        $filial         =  sanitize_text_field($request['filial']);
         
         $usuario_id  =  $user->user_login;
         $response    = array(
@@ -62,6 +63,7 @@ function api_galeria_imagem_post($request){
                 'nome' => $nome,
                 'titulo' =>$titulo,
                 'descricao' =>$descricao,
+                'filial'    => $filial,
                 'cover' => $images_array[0],
             )
         );

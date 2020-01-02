@@ -11,8 +11,9 @@ function api_galeria_imagem_put($request){
 
     if($user_id > 0){
 
-        $titulo      =  sanitize_text_field($request['titulo']);
-        $descricao   =  sanitize_text_field($request['descricao']);
+        $titulo         =  sanitize_text_field($request['titulo']);
+        $descricao      =  sanitize_text_field($request['descricao']);
+        $filial         =  sanitize_text_field($request['filial']);
 
         $usuario_id  =  $user->user_login;
         $response    = array(
@@ -25,6 +26,7 @@ function api_galeria_imagem_put($request){
         wp_update_post($response);
         update_post_meta($imagem_id, 'titulo', $titulo);
         update_post_meta($imagem_id, 'descricao', $descricao);
+        update_post_meta($imagem_id, 'filial', $filial);
 
 
     }

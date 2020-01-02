@@ -17,9 +17,10 @@ function api_usuario_put($request){
         $sobrenome = sanitize_text_field($request['sobrenome']);
         $apelido = sanitize_text_field($request['apelido']);
         
-        $cep = sanitize_text_field($request['cep']);
-        $cidade = sanitize_text_field($request['cidade']);
-        $estado = sanitize_text_field($request['estado']);
+        $filial = sanitize_text_field($request['filial']);
+        // $cep = sanitize_text_field($request['cep']);
+        // $cidade = sanitize_text_field($request['cidade']);
+        // $estado = sanitize_text_field($request['estado']);
     
         $biografia = sanitize_text_field($request['biografia']);
         $funcao = sanitize_text_field( $request['funcao'] );
@@ -33,8 +34,9 @@ function api_usuario_put($request){
                     'ID' => $user_id,
                     'user_pass'=>$senha,
                     'user_email'=>$email,
-                    'display_name' => $nome,
+                    // 'display_name' => $nome,
                     'first_name' => $nome,
+                    'filial' => $filial,
                     'senha' => "Senha Alterada",
                 );
             }
@@ -42,8 +44,9 @@ function api_usuario_put($request){
                 $response = array(
                 'ID' => $user_id,
                 'user_email'=>$email,
-                'display_name' => $nome,
+                // 'display_name' => $nome,
                 'first_name' => $nome,
+                'filial' => $filial,
                 'senha' => "Senha não alterada",
                 );
             }
@@ -52,9 +55,10 @@ function api_usuario_put($request){
             update_user_meta($user_id, 'last_name', $sobrenome);
             update_user_meta($user_id, 'nickname', $apelido);
             
-            update_user_meta($user_id, 'cep', $cep);
-            update_user_meta($user_id, 'cidade', $cidade);
-            update_user_meta($user_id, 'estado', $estado);
+            update_user_meta($user_id, 'filial', $filial);
+            // update_user_meta($user_id, 'cep', $cep);
+            // update_user_meta($user_id, 'cidade', $cidade);
+            // update_user_meta($user_id, 'estado', $estado);
             
             update_user_meta($user_id, 'description', $biografia);
             update_user_meta($user_id, 'wp_capabilities', $funcao);
@@ -113,9 +117,11 @@ function api_user_put($request){
                 $sobrenome = sanitize_text_field($request['sobrenome']);
                 $apelido = sanitize_text_field($request['apelido']);
 
-                $cep = sanitize_text_field($request['cep']);
-                $cidade = sanitize_text_field($request['cidade']);
-                $estado = sanitize_text_field($request['estado']);
+                $filial = sanitize_text_field($request['filial']);
+
+                // $cep = sanitize_text_field($request['cep']);
+                // $cidade = sanitize_text_field($request['cidade']);
+                // $estado = sanitize_text_field($request['estado']);
             
                 $biografia = sanitize_text_field($request['biografia']);
                 $funcao = sanitize_text_field( $request['funcao'] );
@@ -134,6 +140,7 @@ function api_user_put($request){
                             'user_email'=>$email,
                             'display_name' => $nome,
                             'first_name' => $primeiroNome,
+                            'filial' => $filial,
                             'role'  => $funcao,
                             'senha' => "Senha Alterada",
                         );
@@ -144,6 +151,7 @@ function api_user_put($request){
                         'user_email'=>$email,
                         'display_name' => $nome,
                         'first_name' => $primeiroNome,
+                        'filial' => $filial,
                         'role'  => $funcao,
                         'senha' => "Senha não alterada",
                         );
@@ -154,9 +162,11 @@ function api_user_put($request){
                     update_user_meta($user_id, 'last_name', $sobrenome);
                     update_user_meta($user_id, 'nickname', $apelido);
                     
-                    update_user_meta($user_id, 'cep', $cep);
-                    update_user_meta($user_id, 'cidade', $cidade);
-                    update_user_meta($user_id, 'estado', $estado);
+                    update_user_meta($user_id, 'filial', $filial);
+                    
+                    // update_user_meta($user_id, 'cep', $cep);
+                    // update_user_meta($user_id, 'cidade', $cidade);
+                    // update_user_meta($user_id, 'estado', $estado);
                     
                     update_user_meta($user_id, 'description', $biografia);
 

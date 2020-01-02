@@ -17,6 +17,7 @@ function api_galeria_video_put($request){
         $nome_musica        =  sanitize_text_field($request['nome_musica']);
         $url_embed          =  sanitize_text_field($request['url_embed']);
         $descricao          =  sanitize_text_field($request['descricao']);
+        $filial             =  sanitize_text_field($request['filial']);
 
         $usuario_id  =  $user->user_login;
         $response    = array(
@@ -33,6 +34,7 @@ function api_galeria_video_put($request){
         update_post_meta($imagem_id, 'nome_musica', $nome_musica);
         update_post_meta($imagem_id, 'url_embed',   $url_embed);
         update_post_meta($imagem_id, 'descricao',   $descricao);
+        update_post_meta($imagem_id, 'filial',      $filial);
 
 
     }

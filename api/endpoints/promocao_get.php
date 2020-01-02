@@ -1,6 +1,6 @@
 <?php
 
-function galeria_promocao_scheme($slug){
+function promocao_scheme($slug){
 
     $post_id = get_promocao_id_slug($slug);
     
@@ -31,6 +31,8 @@ function galeria_promocao_scheme($slug){
             "data_ini" =>$post_meta['data_ini'][0],
             "data_fim" =>$post_meta['data_fim'][0],
             "status" =>$post_meta['status'][0],
+            "banner" =>$post_meta['banner'][0],
+            "filial" =>$post_meta['filial'][0],
             
         );
 
@@ -78,7 +80,7 @@ function api_promocao_get($request){
     $imagens = array();
 
     foreach($posts as $key => $value){
-        $imagens[] = galeria_promocao_scheme($value->post_name);
+        $imagens[] = promocao_scheme($value->post_name);
     }
 
     $response = rest_ensure_response($imagens);
@@ -104,7 +106,7 @@ add_action('rest_api_init','registrar_api_promocao_get');
 
 function api_promocao_id_get($request){
     
-    $response = galeria_promocao_scheme($request["slug"]);
+    $response = promocao_scheme($request["slug"]);
     return rest_ensure_response($response);
 
 }
@@ -121,5 +123,58 @@ function registrar_api_promocao_id_get(){
 }
 
 add_action('rest_api_init','registrar_api_promocao_id_get');
+
+
+
+// Retornar Promoção Por filial 
+
+function api_promocao_filial_get($request){
+    $slug = $request["slug"];
+    
+    $q = sanitize_text_field($request['q'])?:'';
+    $_page = sanitize_text_field($request['_page'])?:0;
+    $_limit = sanitize_text_field($request['_limit'])?:-1;
+    $usuario_id = sanitize_text_field($usuario_id);
+
+
+    $queryPromocao = array(
+        'post_type'=>'promocao',
+        'post_per_page' => $_limit,
+        'paged' => $_page,
+        's' =>$q,
+        'meta_query' => array(
+            array(
+                'key' => 'filial',
+                'value' => $slug,
+                'compare' => '=',
+            )
+        )
+    );
+
+    $loopProgramacao = new WP_Query($queryPromocao);
+    $posts = $loopProgramacao->posts;
+
+    foreach($posts as $key => $value){
+        $progra[] = promocao_scheme($value->post_name);
+    }
+
+    $response = rest_ensure_response($progra);
+    $response->header('X-Total-Count',$total);
+    return ($response);
+    
+}
+
+function registrar_api_promocao_filial_get(){
+
+    register_rest_route('api', '/promocaofilial/(?P<slug>[-\w]+)', array(
+        array(
+            'methods' => WP_REST_Server::READABLE,
+            'callback' => 'api_promocao_filial_get',
+        ),
+    ));
+}
+
+add_action('rest_api_init','registrar_api_promocao_filial_get');
+
 
 ?>

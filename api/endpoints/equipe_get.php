@@ -169,7 +169,7 @@ function registrar_api_equipe_get(){
 add_action('rest_api_init','registrar_api_equipe_get');
 
 
-// Retornar Musica Pelo Seu ID 
+// Retornar Equipe Pelo Seu ID 
 function api_equipe_id_get($request){
     
     $response = equipe_scheme($request["slug"]);
