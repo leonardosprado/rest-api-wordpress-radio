@@ -40,7 +40,7 @@ function api_imagem_post($request){
             foreach($images as $key => $value ){
                 $images_array[] = array(
                     'ID' => $value->ID,
-                    'url' => $value->guid,
+                    'src' => $value->guid,
                 );
             }
         }

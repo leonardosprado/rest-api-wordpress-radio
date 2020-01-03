@@ -46,12 +46,14 @@ function api_galeria_imagem_post($request){
             $images_array = array();
             foreach($images as $key => $value ){
                 $images_array[] = array(
+                    'ID' => $value->ID,
                     'src' => $value->guid,
                 );
             }
         }
 
         update_post_meta($imagem_id, 'cover', $images_array[0]);
+        update_post_meta($imagem_id, 'images', $images_array);
 
 
         $response  = array(
@@ -65,6 +67,7 @@ function api_galeria_imagem_post($request){
                 'descricao' =>$descricao,
                 'filial'    => $filial,
                 'cover' => $images_array[0],
+                'images' => $images_array,
             )
         );
     }

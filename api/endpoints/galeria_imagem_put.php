@@ -14,7 +14,8 @@ function api_galeria_imagem_put($request){
         $titulo         =  sanitize_text_field($request['titulo']);
         $descricao      =  sanitize_text_field($request['descricao']);
         $filial         =  sanitize_text_field($request['filial']);
-
+        $cover          =  sanitize_text_field($request['cover']);
+        $images         =  $request['images'];
         $usuario_id  =  $user->user_login;
         $response    = array(
             'ID' =>  $imagem_id,
@@ -27,6 +28,8 @@ function api_galeria_imagem_put($request){
         update_post_meta($imagem_id, 'titulo', $titulo);
         update_post_meta($imagem_id, 'descricao', $descricao);
         update_post_meta($imagem_id, 'filial', $filial);
+        update_post_meta($imagem_id, 'images', $images);
+        update_post_meta($imagem_id, 'cover', $images[0]);
 
 
     }

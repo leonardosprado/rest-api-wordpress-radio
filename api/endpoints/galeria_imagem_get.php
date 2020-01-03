@@ -10,7 +10,7 @@ function galeria_imagem_scheme($slug){
 
         $images = get_attached_media('image', $post_id);
 
-        $images_array = null;
+        $images_array = null; 
 
         if($images){
             $images_array = array();
@@ -33,6 +33,7 @@ function galeria_imagem_scheme($slug){
             "descricao" =>$post_meta['descricao'][0],
             "filial" =>$post_meta['filial'][0],
             "cover" =>$cover,
+            "images" => maybe_unserialize($post_meta['images'][0]),
         );
 
     }
