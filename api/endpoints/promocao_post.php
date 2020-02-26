@@ -12,6 +12,7 @@ function api_promocao_post($request){
         $data_fim   = sanitize_text_field($request['data_fim']);
         $status     = sanitize_text_field( $request['status']);
         $filial     = sanitize_text_field( $request['filial']);
+        $media     =  $request['media'];
 
         $usuario_id =  $user->user_login;
         $response   = array(
@@ -27,6 +28,7 @@ function api_promocao_post($request){
                 'data_fim'                  => $data_fim,
                 'status'                    => $status,
                 'filial'                    => $filial,
+                'media'                     => $media,
             )
         );
         $imagem_id = wp_insert_post($response);

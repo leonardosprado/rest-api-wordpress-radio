@@ -58,8 +58,10 @@ require_once($template_diretorio . "/endpoints/promocao_put.php");
 require_once($template_diretorio . "/endpoints/promocao_delete.php");
 
 
-// UPLOAD DE IMAGEM RETORNA LINK DO CAMINHO NO SERVIDOR
-require_once($template_diretorio . "/endpoints/imagem_post.php");
+// UPLOAD DE MEDIA NO SERVIDOR
+require_once($template_diretorio . "/endpoints/media_get.php");
+require_once($template_diretorio . "/endpoints/media_post.php");
+require_once($template_diretorio . "/endpoints/media_delete.php");
 
 // OUVINTE / USUARIO DO PORTAL 
 require_once($template_diretorio . "/endpoints/ouvinte_post.php");
@@ -73,6 +75,7 @@ require_once($template_diretorio . "/endpoints/promocao_cadastro_post.php");
 require_once($template_diretorio . "/endpoints/musica_post.php");
 require_once($template_diretorio . "/endpoints/musica_get.php");
 require_once($template_diretorio . "/endpoints/musica_delete.php");
+require_once($template_diretorio . "/endpoints/musica_put.php");
 
 // Equipe
 require_once($template_diretorio . "/endpoints/equipe_post.php");
@@ -83,6 +86,7 @@ require_once($template_diretorio . "/endpoints/equipe_delete.php");
 require_once($template_diretorio . "/endpoints/filial_get.php");
 require_once($template_diretorio . "/endpoints/filial_post.php");
 require_once($template_diretorio . "/endpoints/filial_delete.php");
+require_once($template_diretorio . "/endpoints/filial_put.php");
 
 // Programacao
 require_once($template_diretorio . "/endpoints/programacao_get.php");
@@ -90,6 +94,11 @@ require_once($template_diretorio . "/endpoints/programacao_post.php");
 require_once($template_diretorio . "/endpoints/programacao_put.php");
 require_once($template_diretorio . "/endpoints/programacao_delete.php");
 
+// TV SUCESSO - PAGINA 
+require_once($template_diretorio . "/endpoints/tvsucesso_get.php");
+
+
+add_theme_support( 'post-thumbnails', array( 'imagem' ) );
 
 
 function get_usuario_id_slug($slug){
@@ -114,6 +123,19 @@ function get_produto_id_slug($slug){
     $posts = $query->get_posts();
     return array_shift($posts);
 }
+
+
+function get_media_id_slug($slug){
+    $query = new WP_Query(array(
+         'name'          => $slug,
+         'post_type'     => 'imagem',
+         'numberposts'   => 1,
+         'fields'        => 'ids'
+    ));
+    $posts = $query->get_posts();
+    return array_shift($posts);
+}
+
 
 function get_posts_id_slug($slug){
     $query = new WP_Query(array(
@@ -236,6 +258,21 @@ function expire_token(){
     return time() + (60*60);
 }
 
-add_action('jwt_auth_expire', 'expire_token')
+add_action('jwt_auth_expire', 'expire_token');
+
+function cc_mime_types($mimes) {
+    $mimes['svg'] = 'image/svg+xml';
+    return $mimes;
+}
+
+add_filter('upload_mimes', 'cc_mime_types');
+
+
+function my_lost_password_page( $lostpassword_url, $redirect ) {
+    return home_url( '/home/?redirect_to=' . $redirect );
+}
+
+add_filter( 'lostpassword_url', 'my_lost_password_page', 10, 2 );
+
 
 ?>

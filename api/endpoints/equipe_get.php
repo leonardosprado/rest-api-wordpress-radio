@@ -67,7 +67,7 @@ function api_equipe_filial_get($request){
 
     $queryEquipe = array(
         'post_type'=>'equipe',
-        'post_per_page' => $_limit,
+        'posts_per_page' => $_limit,
         'paged' => $_page,
         's' =>$q,
         'meta_query' => array(
@@ -131,7 +131,7 @@ function api_equipe_get($request){
 
     $query = array(
         'post_type'=>'equipe',
-        'post_per_page' => $_limit,
+        'posts_per_page' => $_limit,
         'paged' => $_page,
         's' =>$q,
         'meta_query' => array(

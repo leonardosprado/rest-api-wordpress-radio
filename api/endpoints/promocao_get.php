@@ -21,6 +21,8 @@ function promocao_scheme($slug){
                 );
             }
         }
+       
+
         $response = array(
             'id' => $slug,
             "titulo" => $post->post_title,
@@ -31,7 +33,7 @@ function promocao_scheme($slug){
             "data_ini" =>$post_meta['data_ini'][0],
             "data_fim" =>$post_meta['data_fim'][0],
             "status" =>$post_meta['status'][0],
-            "banner" =>$post_meta['banner'][0],
+            "media" => unserialize($post_meta['media'][0]),
             "filial" =>$post_meta['filial'][0],
             
         );
@@ -48,9 +50,9 @@ function promocao_scheme($slug){
 //API IMAGENS 
 function api_promocao_get($request){
 
-    $q = sanitize_text_field($request['q'])?:'';
-    $_page = sanitize_text_field($request['_page'])?:0;
-    $_limit = sanitize_text_field($request['_limit'])?:-1;
+    $q = sanitize_text_field($request['q']) ?:'';
+    $_page = sanitize_text_field($request['_page']) ?:0;
+    $_limit = sanitize_text_field($request['_limit']) ?: -1;
     $usuario_id = sanitize_text_field($usuario_id);
 
     $usuario_id_query = null;
@@ -65,7 +67,7 @@ function api_promocao_get($request){
 
     $query = array(
         'post_type'=>'promocao',
-        'post_per_page' => $_limit,
+        'posts_per_page' => $_limit,
         'paged' => $_page,
         's' =>$q,
         'meta_query' => array(

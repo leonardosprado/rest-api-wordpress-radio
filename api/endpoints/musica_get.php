@@ -20,7 +20,8 @@ function top_musica_scheme($slug){
             }
         }
         $response = array(
-            'id' => $slug,
+            'slug' => $slug,
+            'id' => $post->ID,
             "titulo" => $post->post_title,
             "capa" => $images_array[0],
             "nome_musica" =>$post_meta['nome_musica'][0],
@@ -31,11 +32,14 @@ function top_musica_scheme($slug){
 
     }
     else{ 
-        $response = new WP_Error('naoexiste','Foto não Encontrada',array('status'=>404));
+        $response = new WP_Error('naoexiste','Musica não Encontrada',array('status'=>404));
     }
 
     return $response;
 }
+
+
+
 
 
 //RETORNAR TODAS AS MUSICAS
@@ -58,7 +62,7 @@ function api_top_musica_get($request){
 
     $query = array(
         'post_type'=>'topmusica',
-        'post_per_page' => $_limit,
+        'posts_per_page' => $_limit,
         'paged' => $_page,
         's' =>$q,
         'meta_query' => array(
@@ -68,15 +72,16 @@ function api_top_musica_get($request){
 
     $loop = new WP_Query($query);
     $posts = $loop->posts;
+
     $total = $loop->found_posts;
 
-    $imagens = array();
+    $postagem = array();
 
     foreach($posts as $key => $value){
-        $imagens[] = top_musica_scheme($value->post_name);
+        $postagem[] = top_musica_scheme($value->post_name);
     }
-
-    $response = rest_ensure_response($imagens);
+   
+    $response = rest_ensure_response($postagem);
     $response->header('X-Total-Count',$total);
     return ($response);
 }

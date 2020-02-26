@@ -179,9 +179,9 @@ function api_programacao_ar_get($request){
         }
     }
 
-    // $response = rest_ensure_response($progra);
+    $response = rest_ensure_response($progra);
     // $response->header('X-Total-Count',$total);
-    return ($progra);
+    return ($response);
     
 }
 

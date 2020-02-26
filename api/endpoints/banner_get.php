@@ -1,5 +1,9 @@
 <?php
 
+
+
+
+
 function galeria_banner_scheme($slug){
 
     $post_id = get_banner_id_slug($slug);
@@ -48,7 +52,28 @@ function api_banners_get($request){
     $usuario_id = sanitize_text_field($usuario_id);
 
 
-    // Puxar Promocão que possui Banner Ativado. 
+    // Puxar Promocão que possui Banner Ativado.
+    $queryPromocao = array(
+        'post_type'=>'promocao',
+        'post_per_page' => $_limit,
+        'paged' => $_page,
+        's' =>$q,
+        'meta_query' => array(
+            array(
+                'key' => 'status',
+                'value' => 'on',
+                'compare' => '=',
+            )
+        )
+    );
+
+    $loopPromocao= new WP_Query($queryPromocao);
+    $postsPromocao = $loopPromocao->posts;
+    
+    foreach($postsPromocao as $key => $value){
+        $listPromocao[] = promocao_scheme($value->post_name);
+    }
+
 
     // Puxa Banners que possui o staus ONLINE
     $queryBanner = array(
@@ -73,7 +98,26 @@ function api_banners_get($request){
         $imagens[] = galeria_banner_scheme($value->post_name);
     }
 
-    $response = rest_ensure_response($imagens);
+    if($listPromocao && $imagens){
+        $banners = array_merge($listPromocao,$imagens);
+    }
+    else{
+        if($listPromocao){
+            $banners = $listPromocao;
+        }
+        if($imagens){
+            $banners = $imagens;
+        }
+        else{
+            $banners = null;
+        }
+    }
+
+   
+    // $banners = array_merge($listPromocao,$imagens);
+    
+
+    $response = rest_ensure_response($banners);
     $response->header('X-Total-Count',$total);
     return ($response);
 }

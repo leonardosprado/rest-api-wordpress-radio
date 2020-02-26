@@ -3,8 +3,13 @@
 function api_imagem_post($request){
     $user = wp_get_current_user();
     $user_id =  $user->ID;
+
+    $caps = get_user_meta($user_id, 'wp_capabilities', true);
+    $roles = array_keys((array) $caps); //Retronar a Função do Usuario
+    $roles = array_shift($roles);
+
     //JSON 
-    if($user_id > 0){
+    if ($user_id > 0 and ($roles === "administrator" or $roles === "editor" or $roles === "author")) {
         $titulo       =  sanitize_text_field($request['titulo']);
         $content      =  ($request['post_content']);
         
@@ -45,7 +50,8 @@ function api_imagem_post($request){
             }
         }
         $response = array(
-            "imagem" => $images_array[0],
+            "id"     => $post_id,
+            "source_url" => $images_array[0],
         );
 
     }
@@ -58,7 +64,7 @@ function api_imagem_post($request){
 
 function registrar_api_imagem_post(){
 
-    register_rest_route('api', '/imagem', array(
+    register_rest_route('api', '/media', array(
         array(
             'methods' => 'POST',
             'callback' => 'api_imagem_post',

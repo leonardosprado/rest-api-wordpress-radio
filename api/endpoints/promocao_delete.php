@@ -45,12 +45,4 @@ add_action('rest_api_init','registrar_api_promocao_delete');
 
 
 
-
-
-
-
-
-
-
-
 ?>

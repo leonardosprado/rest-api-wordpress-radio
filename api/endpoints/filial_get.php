@@ -28,7 +28,8 @@ function filial_scheme($slug){
             "filial" =>$post_meta['filial'][0],
             "cidade" =>$post_meta['cidade'][0],
             "estado" =>$post_meta['estado'][0],
-            "logo_filial" =>$post_meta['logo_filial'][0],
+            "streaming" =>$post_meta['streaming'][0],
+            "logo" =>$images_array[0],
         );
 
     }

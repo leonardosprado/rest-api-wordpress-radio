@@ -1,6 +1,7 @@
 <?php 
 
 function registrar_cpt_blog(){
+
     register_post_type('blog', array(
         'label' => 'Blog',
         'description ' => 'Blog',
@@ -10,7 +11,10 @@ function registrar_cpt_blog(){
         'rewrite' => array('slug' => 'blog', 'with_front' => true),
         'query_var' => true,
         'supports' => array('custom=fields','author','title','content'),
-        'publicly_queryable' => true
+        'publicly_queryable' => true,
+        'show_in_rest'          => true,
+        'rest_base'             => 'myslug',
+        'rest_controller_class' => 'WP_REST_Posts_Controller'
     ));
 }
 

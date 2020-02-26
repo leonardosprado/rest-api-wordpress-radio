@@ -14,12 +14,9 @@
         "primeiroNome"  => $user_meta['first_name'][0],
         "sobrenome"     => $user_meta['last_name'][0],
         "apelido"       => $user_meta['nickname'][0],
-        // "cep"           => $user_meta['cep'][0],
-        // "numero"        => $user_meta['numero'][0],
-        // "rua"           => $user_meta['rua'][0],
-        // "bairro"        => $user_meta['bairro'][0],
         "cidade"        => $user_meta['cidade'][0],
         "estado"        => $user_meta['estado'][0],
+        "filial"        => $user_meta['filial'][0],
         "biografia"     => $user_meta['description'][0],
         "funcao"        => $user->roles[0],
     );
@@ -37,7 +34,8 @@ function api_ouvinte_get($request){
         $user_meta = get_user_meta($user_id);
 
         $response = array(
-            "id" => $user->user_login,
+            "id" => $user->ID,
+            "login" => $user->user_login,
             "nome" => $user->user_name,
             "email" => $user->user_email,
             "primeiroNome" =>  $user_meta['first_name'][0],
@@ -47,8 +45,10 @@ function api_ouvinte_get($request){
             // "numero" => $user_meta['numero'][0],
             // "rua" => $user_meta['rua'][0],
             // "bairro" => $user_meta['bairro'][0],
+            
             "cidade" => $user_meta['cidade'][0],
             "estado" => $user_meta['estado'][0],
+            "filial" => $user_meta['filial'][0],
             // "biografia" => $user_meta['description'][0],
             "funcao"    =>  $user->roles[0],
         );

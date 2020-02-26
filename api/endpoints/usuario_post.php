@@ -36,7 +36,7 @@ function api_usuario_post($request){
             // update_user_meta($user_id, 'estado', $estado);
         }
         else{
-            $response = new WP_Error('email','Email ja cadastrao.', array('status'=> 403 ));
+            $response = new WP_Error('email','Email ja cadastrado.', array('status'=> 403 ));
         }
     
     }
